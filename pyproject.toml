@@ -1,0 +1,29 @@
+[project]
+name = "football-rag"
+version = "0.1.0"
+description = "A question-answering bot over football Wikipedia articles, built to learn RAG step by step."
+requires-python = ">=3.10"
+dependencies = [
+    "anthropic>=0.40",
+    "chromadb>=0.5",
+    "sentence-transformers>=3.0",
+    "requests>=2.31",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+football-rag = "football_rag.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

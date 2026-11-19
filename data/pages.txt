@@ -1,0 +1,51 @@
+# Wikipedia pages that make up our knowledge base. One title per line.
+# Add or remove pages and re-run `football-rag ingest` + `football-rag index`.
+
+# World Cups
+FIFA World Cup
+1930 FIFA World Cup
+2006 FIFA World Cup
+2010 FIFA World Cup
+2014 FIFA World Cup
+2022 FIFA World Cup
+
+# European Championships
+UEFA Euro 2016
+UEFA Euro 2020
+UEFA Euro 2024
+
+# Champions League finals
+UEFA Champions League
+1999 UEFA Champions League final
+2005 UEFA Champions League final
+2012 UEFA Champions League final
+2014 UEFA Champions League final
+2019 UEFA Champions League final
+2022 UEFA Champions League final
+2023 UEFA Champions League final
+
+# Leagues and seasons
+Premier League
+2003–04 Arsenal F.C. season
+2015–16 Premier League
+
+# Clubs
+Liverpool F.C.
+Manchester United F.C.
+Arsenal F.C.
+Leicester City F.C.
+Real Madrid CF
+FC Barcelona
+
+# Players
+Lionel Messi
+Cristiano Ronaldo
+Pelé
+Zinedine Zidane
+
+# Managers
+Alex Ferguson
+Arsène Wenger
+Carlo Ancelotti
+Jürgen Klopp
+Pep Guardiola
