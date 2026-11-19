@@ -40,6 +40,8 @@ flowchart LR
 | 5. Generate | `generate.py` | Grounding Claude in sources, citations, saying "I don't know" |
 | 6. Evaluate | `evaluate.py` | Retrieval metrics (hit@k, MRR) and LLM-as-judge answer grading |
 
+📘 **New to RAG?** Read [docs/CONCEPTS.md](docs/CONCEPTS.md) for every concept in this project, explained with football analogies, diagrams and a self-quiz.
+
 ## Setup
 
 Needs Python 3.10+ and an [Anthropic API key](https://console.anthropic.com/).
