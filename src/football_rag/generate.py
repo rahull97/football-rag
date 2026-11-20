@@ -24,6 +24,19 @@ NO_ANSWER = "I don't know based on the available sources."
 
 @dataclass
 class Answer:
+    """Claude's answer plus everything needed to show and audit it.
+
+    Attributes:
+        text: Claude's answer, with citation markers like [1] that refer to
+            positions in `sources` (1-based). Equals `NO_ANSWER` when Claude
+            follows the "I don't know" rule exactly.
+        sources: The chunks given to Claude, in the order they were numbered.
+            `sources[0]` is [1].
+        input_tokens: Prompt tokens billed for the call (system prompt +
+            sources + question).
+        output_tokens: Tokens Claude generated.
+    """
+
     text: str
     sources: list[RetrievedChunk]
     input_tokens: int
@@ -31,11 +44,51 @@ class Answer:
 
 
 def format_sources(chunks: list[RetrievedChunk]) -> str:
+    """Render retrieved chunks as the numbered source list Claude sees.
+
+    Each chunk becomes a block like:
+
+        [1] (from "Leicester City F.C.")
+        <chunk text>
+
+    Blocks are separated by a blank line and numbered from 1 in list order.
+    The numbers are what Claude cites, and they match the numbering the CLI
+    prints under "Sources:".
+
+    Args:
+        chunks: Retrieved chunks, most relevant first.
+
+    Returns:
+        The formatted text (empty string if `chunks` is empty).
+    """
     return "\n\n".join(f"[{i}] (from \"{c.title}\")\n{c.text}" for i, c in enumerate(chunks, 1))
 
 
 def generate_answer(client: Anthropic, model: str, question: str,
                     chunks: list[RetrievedChunk]) -> Answer:
+    """Ask Claude to answer `question` using only `chunks`, with citations.
+
+    Makes one Messages API call. The system prompt (`SYSTEM_PROMPT`) sets the
+    grounding rules; the user message contains the numbered sources inside
+    <sources>...</sources> tags followed by the question. The answer is capped
+    at 500 output tokens. All text blocks of the reply are joined and stripped.
+
+    This function does not check the answer against the sources; citation
+    accuracy is only measured indirectly by the LLM judge in `evaluate.py`.
+
+    Args:
+        client: An Anthropic client (reads ANTHROPIC_API_KEY).
+        model: Claude model id (`Settings.answer_model`).
+        question: The user's question.
+        chunks: Retrieved chunks to use as sources.
+
+    Returns:
+        An `Answer` with the text, the chunks used, and token usage.
+
+    Raises:
+        anthropic.APIError: Any API failure (missing/invalid key,
+            rate limit, unknown model, network error) is passed through.
+    """
     user_message = f"<sources>\n{format_sources(chunks)}\n</sources>\n\nQuestion: {question}"
     resp = client.messages.create(
         model=model,
